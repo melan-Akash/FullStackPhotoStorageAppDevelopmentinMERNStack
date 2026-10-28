@@ -24,7 +24,11 @@ export default function App() {
                 <Route path="/login" element={<AuthPage />} />
                 <Route path="/register" element={<AuthPage />} />
 
-                <Route path="/" element={token ? <Navigate to="/photos" replace /> : <AuthPage />} />
+                {/* If authenticated go to /photos, otherwise redirect to /login */}
+                <Route
+                    path="/"
+                    element={token ? <Navigate to="/photos" replace /> : <Navigate to="/login" replace />}
+                />
 
                 <Route element={token ? <AppLayout /> : <Navigate to="/login" replace />}>
                     <Route path="/photos" element={<PhotosPage />} />
@@ -38,6 +42,4 @@ export default function App() {
             </Routes>
         </>
     );
-}
-
 }
