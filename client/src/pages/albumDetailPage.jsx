@@ -37,13 +37,18 @@ export default function AlbumDetailPage() {
 
     const handleToggleFavorite = (photoId) => {
         if (!album) return;
+        let isNowFav = false;
         setAlbum((prev) => ({
             ...prev,
-            photos: prev.photos.map((p) =>
-                p._id === photoId ? { ...p, isFavorite: !p.isFavorite } : p
-            ),
+            photos: prev.photos.map((p) => {
+                if (p._id === photoId) {
+                    isNowFav = !p.isFavorite;
+                    return { ...p, isFavorite: isNowFav };
+                }
+                return p;
+            }),
         }));
-        toast.success('Favorite status updated');
+        toast.success(isNowFav ? 'Added to favorites ⭐' : 'Removed from favorites');
     };
 
     const handleDeleteAlbum = () => {
@@ -52,7 +57,7 @@ export default function AlbumDetailPage() {
                 'Are you sure you want to delete this album? Photos inside will remain safe in your library.'
             )
         ) {
-            toast.success('Album deleted');
+            toast.success('Album deleted successfully');
             navigate('/albums');
         }
     };
@@ -63,6 +68,7 @@ export default function AlbumDetailPage() {
             ...prev,
             photos: [...prev.photos, ...newPhotos],
         }));
+        toast.success(`Added ${newPhotos.length} photo(s) to "${album.title}"`);
     };
 
     if (loading) {
