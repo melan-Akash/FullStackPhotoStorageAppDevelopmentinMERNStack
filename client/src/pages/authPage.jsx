@@ -70,7 +70,7 @@ export default function AuthPage() {
                     />
                     <div className="absolute inset-0 bg-linear-to-b from-black/30 via-black/60 to-black" />
                     <div className="relative z-10 mt-auto pt-24 sm:pt-32">
-                        <h2 className="text-4xl sm:text-5xl lg:text-5xl font-medium ">MY Photos</h2>
+                        <h2 className="text-4xl sm:text-5xl lg:text-5xl font-medium ">ImageCloud</h2>
                         <p className="text-xs sm:text-sm text-white/80 leading-relaxed max-w-sm mt-4 sm:mt-5">
                             Safely store and organize your HD photos and videos.
                         </p>
@@ -94,7 +94,7 @@ export default function AuthPage() {
                         <p className="text-xs sm:text-sm text-slate-500 mt-2">
                             {isSignIn
                                 ? 'Enter your email and password to access your photo library'
-                                : 'Join My photos to organize your albums'}
+                                : 'Join ImageCloud to organize your albums'}
                         </p>
                     </div>
 

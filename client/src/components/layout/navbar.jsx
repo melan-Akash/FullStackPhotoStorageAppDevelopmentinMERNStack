@@ -53,7 +53,7 @@ export default function Navbar({
                         <Menu className="size-5" />
                     </button>
                     <img src="/logo.png" alt="" className="size-8" />
-                    <h1 className="navbar-brand-text">MY PHOTOS</h1>
+                    <h1 className="navbar-brand-text">ImageCloud</h1>
                 </div>
 
                 <div className="flex-1 max-w-2xl relative">
