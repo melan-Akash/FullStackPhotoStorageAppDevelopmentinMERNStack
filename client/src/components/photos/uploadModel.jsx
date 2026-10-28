@@ -95,6 +95,7 @@ export default function UploadModal({ isOpen, onClose, onUploadSuccess }) {
                         <p className="text-xs text-slate-500">Upload and organize your photos & videos</p>
                     </div>
                     <button
+                        type="button"
                         onClick={handleClose}
                         disabled={uploading}
                         className="p-2 hover:bg-slate-100 text-slate-400 hover:text-slate-600 rounded-full transition cursor-pointer"
@@ -141,6 +142,7 @@ export default function UploadModal({ isOpen, onClose, onUploadSuccess }) {
                                     Selected ({previews.length})
                                 </span>
                                 <button
+                                    type="button"
                                     onClick={() => {
                                         previews.forEach((p) => {
                                             if (p.url) URL.revokeObjectURL(p.url);
@@ -167,13 +169,14 @@ export default function UploadModal({ isOpen, onClose, onUploadSuccess }) {
                                                     muted
                                                     playsInline
                                                 />
-                                                <div className="absolute bottom-1 left-1 px-1.5 py-0.5 bg-black/70 backdrop-blur-xs rounded text-[10px] text-white flex items-center gap-1">
+                                                <div className="absolute bottom-1 left-1 px-1.5 py-0.5 bg-black/70 backdrop-blur-sm rounded text-[10px] text-white flex items-center gap-1">
                                                     <Film className="size-3 text-orange-400" />
                                                     <span>Video</span>
                                                 </div>
                                             </div>
                                         ) : preview.isHeic ? (
-                                            <div className="size-full relative bg-gradient-to-br from-slate-800 to-slate-950 flex flex-col items-center justify-center p-2 text-center select-none">
+                                            <div className="size-full relative  from-slate-800 to-slate-950 flex flex-col items-center justify-center p-2 text-center select-none">
+                                                <ImageIcon className="size-6 text-rose-400 mb-1" />
                                                 <span className="px-2 py-0.5 rounded text-[11px] font-bold tracking-wider bg-rose-500/20 text-rose-400 border border-rose-500/30 mb-1">
                                                     HEIC
                                                 </span>
@@ -190,6 +193,7 @@ export default function UploadModal({ isOpen, onClose, onUploadSuccess }) {
                                             />
                                         )}
                                         <button
+                                            type="button"
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 handleRemove(idx);
@@ -208,6 +212,7 @@ export default function UploadModal({ isOpen, onClose, onUploadSuccess }) {
                 <div className="modal-footer">
                     <div className="flex items-center gap-2">
                         <button
+                            type="button"
                             onClick={handleClose}
                             disabled={uploading}
                             className="btn-secondary"
@@ -215,6 +220,7 @@ export default function UploadModal({ isOpen, onClose, onUploadSuccess }) {
                             Cancel
                         </button>
                         <button
+                            type="button"
                             onClick={handleUpload}
                             disabled={uploading || files.length === 0}
                             className="btn-primary"
