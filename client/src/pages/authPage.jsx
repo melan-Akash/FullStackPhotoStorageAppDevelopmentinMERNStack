@@ -80,14 +80,15 @@ export default function AuthPage() {
 
             {/* Right Column - Auth Form */}
             <div className="lg:col-span-6 bg-white px-8 py-10 sm:px-12 sm:py-14 lg:px-16 lg:py-16 flex flex-col justify-between">
-                <img
-                    src="/logo.png"
-                    alt="App Logo"
-                    className="h-16 xl:h-20 xl:mt-10 w-auto object-contain self-start"
-                />
+                <div className="hidden lg:block" />
 
                 <div className="max-w-md w-full mx-auto my-auto py-2">
-                    <div className="text-center mb-8">
+                    <div className="flex flex-col items-center text-center mb-8">
+                        <img
+                            src="/logo.png"
+                            alt="ImageCloud Logo"
+                            className="size-14 sm:size-16 object-contain mb-3 sm:mb-4"
+                        />
                         <h1 className="text-3xl sm:text-4xl font-serif text-slate-900 font-normal tracking-tight">
                             {isSignIn ? 'Welcome Back' : 'Create Account'}
                         </h1>
