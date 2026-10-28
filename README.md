@@ -21,6 +21,39 @@
 
 ---
 
+## 🖼️ Application Showcase
+
+<p align="center">
+  <img src="ss/imagecloud.png" alt="ImageCloud Desktop Dashboard" width="100%" />
+</p>
+
+<p align="center">
+  <em>Desktop Timeline & AI-Powered Gallery Dashboard</em>
+</p>
+
+<br />
+
+<table align="center" width="100%">
+  <tr>
+    <th width="65%" align="center">🔐 Split-Screen Authentication & Security</th>
+    <th width="35%" align="center">📱 Native Mobile Experience</th>
+  </tr>
+  <tr>
+    <td align="center" valign="top">
+      <img src="ss/login.png" alt="ImageCloud Authentication Screen" width="100%" />
+      <br />
+      <em>Centered branding, JWT Sign In, and 6-digit OTP password recovery</em>
+    </td>
+    <td align="center" valign="top">
+      <img src="ss/imagecloudmobile.png" alt="ImageCloud Mobile View" width="100%" />
+      <br />
+      <em>Bottom navigation dock, touch-friendly card selection, and responsive layout</em>
+    </td>
+  </tr>
+</table>
+
+---
+
 ## 🌟 Key Features
 
 ### 🧠 1. AI-Powered Object Detection & Semantic Search

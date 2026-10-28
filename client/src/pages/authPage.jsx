@@ -132,7 +132,7 @@ export default function AuthPage() {
     };
 
     return (
-        <div className="w-full bg-white min-h-screen lg:h-screen rounded-none sm:rounded-[38px] overflow-y-auto lg:overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-160 lg:min-h-180">
+        <div className="w-full bg-white min-h-screen lg:h-screen rounded-none sm:rounded-[38px] overflow-y-auto lg:overflow-hidden grid grid-cols-1 lg:grid-cols-12  lg:min-h-180">
             {/* Left Column - Branding Banner */}
             <div className="hidden lg:flex relative lg:col-span-6 p-2 sm:p-3 flex-col">
                 <div className="relative size-full rounded-[26px] sm:rounded-4xl overflow-hidden flex flex-col justify-between p-8 sm:p-12 text-white bg-black">
