@@ -14,20 +14,19 @@ export default function App() {
     const { token, loading } = useAuth();
 
     if (loading) {
-        return <Loading />;
+        return <Loading fullScreen />;
     }
 
     return (
         <>
-            <Toaster position="top-right" />
+            <Toaster position="bottom-right" />
             <Routes>
-                <Route path="/" element={token ? <Navigate to="/photos" replace /> : <AuthPage />}>
-                    <Route index element={<AuthPage />} />
-                    <Route path="login" element={<AuthPage />} />
-                    <Route path="register" element={<AuthPage />} />
-                </Route>
+                <Route path="/login" element={<AuthPage />} />
+                <Route path="/register" element={<AuthPage />} />
 
-                <Route element={token ? <AppLayout /> : <Navigate to="/" replace />}>
+                <Route path="/" element={token ? <Navigate to="/photos" replace /> : <AuthPage />} />
+
+                <Route element={token ? <AppLayout /> : <Navigate to="/login" replace />}>
                     <Route path="/photos" element={<PhotosPage />} />
                     <Route path="/favorites" element={<FavoritePage />} />
                     <Route path="/albums" element={<AlbumsPage />} />
@@ -35,7 +34,7 @@ export default function App() {
                     <Route path="/trash" element={<TrashPage />} />
                 </Route>
 
-                <Route path="*" element={<Navigate to="/photos" replace />} />
+                <Route path="*" element={<Navigate to="/login" replace />} />
             </Routes>
         </>
     );
