@@ -18,3 +18,4 @@ Allow: /
 
 # Sitemap
 Sitemap: https://imagecloud.app/sitemap.xml
+

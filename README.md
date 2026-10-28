@@ -236,9 +236,11 @@ Open `http://localhost:5173` in your browser.
 ### Authentication (`/api/auth`)
 | Method | Endpoint | Description | Auth Required |
 |---|---|---|:---:|
-| `POST` | `/api/auth/register` | Register new user account | No |
+| `POST` | `/api/auth/register` | Register new user account & sends welcome email | No |
 | `POST` | `/api/auth/login` | Authenticate user and issue JWT | No |
 | `GET` | `/api/auth/me` | Fetch authenticated user profile | Yes |
+| `POST` | `/api/auth/forgot-password` | Generate & email 6-digit verification code (OTP) | No |
+| `POST` | `/api/auth/reset-password` | Verify OTP and update password with bcrypt | No |
 
 ### Media Management (`/api/media`)
 | Method | Endpoint | Description | Auth Required |

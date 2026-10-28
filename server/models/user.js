@@ -20,6 +20,14 @@ const userSchema = new Schema(
       required: true,
       select: false,
     },
+    resetOtp: {
+      type: String,
+      select: false,
+    },
+    resetOtpExpires: {
+      type: Date,
+      select: false,
+    },
   },
   { timestamps: true }
 );
