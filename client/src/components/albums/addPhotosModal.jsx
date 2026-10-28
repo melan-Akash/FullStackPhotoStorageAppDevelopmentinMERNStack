@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { X, Check, Play } from 'lucide-react';
-import toast from 'react-hot-toast';
-import { DUMMY_MEDIA } from '../../assets/assets';
+import api from '../../config/api';
 import Loading from '../common/loading';
 
 export default function AddPhotosModal({
@@ -19,13 +18,19 @@ export default function AddPhotosModal({
     useEffect(() => {
         if (isOpen) {
             setLoading(true);
-            setTimeout(() => {
-                // Filter out photos already in the album
-                const filtered = DUMMY_MEDIA.filter((p) => !existingPhotoIds.includes(p._id));
-                setAvailablePhotos(filtered.length > 0 ? filtered : DUMMY_MEDIA);
-                setSelectedIds([]);
-                setLoading(false);
-            }, 300);
+            api.get('/api/media')
+                .then((res) => {
+                    const allMedia = res.data?.media || [];
+                    const filtered = allMedia.filter((p) => !existingPhotoIds.includes(p._id));
+                    setAvailablePhotos(filtered);
+                    setSelectedIds([]);
+                })
+                .catch((err) => {
+                    console.error('Failed to load photos for album:', err);
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
         }
     }, [isOpen, existingPhotoIds]);
 
@@ -41,8 +46,7 @@ export default function AddPhotosModal({
         if (selectedIds.length === 0) return;
         setAdding(true);
         try {
-            const addedPhotos = DUMMY_MEDIA.filter((p) => selectedIds.includes(p._id));
-            toast.success(`Added ${selectedIds.length} photo(s) to album`);
+            const addedPhotos = availablePhotos.filter((p) => selectedIds.includes(p._id));
             onPhotosAdded?.(addedPhotos);
             onClose();
         } finally {
@@ -152,4 +156,3 @@ export default function AddPhotosModal({
         </div>
     );
 }
-

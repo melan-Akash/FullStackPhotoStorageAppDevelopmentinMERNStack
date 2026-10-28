@@ -31,7 +31,7 @@ export default function AuthPage() {
     });
 
     const navigate = useNavigate();
-    const { login } = useAuth();
+    const { login, register } = useAuth();
 
     const handleChange = (key, value) => {
         setFormData((prev) => ({ ...prev, [key]: value }));
@@ -41,18 +41,18 @@ export default function AuthPage() {
         e.preventDefault();
         setLoading(true);
         try {
-            if (login) {
-                login({
-                    name: formData.name || 'User',
-                    email: formData.email,
-                });
+            if (isSignIn) {
+                await login(formData.email, formData.password);
+                toast.success('Welcome back! Signed in successfully.');
+            } else {
+                await register(formData.name, formData.email, formData.password);
+                toast.success('Account created successfully!');
             }
-            toast.success(
-                isSignIn ? 'Welcome back! Signed in successfully.' : 'Account created successfully!'
-            );
             navigate('/');
-        } catch {
-            toast.error('Authentication failed. Please try again.');
+        } catch (error) {
+            const msg =
+                error.response?.data?.message || 'Authentication failed. Please check your credentials.';
+            toast.error(msg);
         } finally {
             setLoading(false);
         }

@@ -1,39 +1,43 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { DUMMY_MEDIA } from '../assets/assets';
+import api from '../config/api';
+import { useAuth } from '../context/context';
 import Loading from '../components/common/loading';
 import PhotoGrid from '../components/photos/photoGrid';
 import PhotoLightbox from '../components/photos/photoLightbox';
 
 export default function FavoritePage() {
     const { searchQuery } = useOutletContext() || {};
+    const { fetchStats } = useAuth();
     const [favorites, setFavorites] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedIds, setSelectedIds] = useState([]);
     const [selectedPhoto, setSelectedPhoto] = useState(null);
 
-    useEffect(() => {
+    const fetchFavorites = useCallback(async () => {
         setLoading(true);
-        const timer = setTimeout(() => {
-            // Default demo favorites (items 5 to 9 or items with isFavorite)
-            let result = DUMMY_MEDIA.slice(5, 9).map((item) => ({ ...item, isFavorite: true }));
-
+        try {
+            const params = { favorite: 'true' };
             if (searchQuery && searchQuery.trim()) {
-                const q = searchQuery.toLowerCase().trim();
-                result = result.filter(
-                    (item) =>
-                        item.title?.toLowerCase().includes(q) ||
-                        item.objects?.some((obj) => obj.toLowerCase().includes(q))
-                );
+                params.query = searchQuery.trim();
             }
-
-            setFavorites(result);
+            const res = await api.get('/api/media', { params });
+            setFavorites(res.data?.media || []);
+        } catch (error) {
+            console.error('Failed to fetch favorites:', error);
+            toast.error('Failed to load favorites');
+        } finally {
             setLoading(false);
-        }, 500);
-
-        return () => clearTimeout(timer);
+        }
     }, [searchQuery]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            fetchFavorites();
+        }, 300);
+        return () => clearTimeout(timer);
+    }, [fetchFavorites]);
 
     const handleToggleSelect = (id) => {
         setSelectedIds((prev) =>
@@ -41,17 +45,32 @@ export default function FavoritePage() {
         );
     };
 
-    const handleToggleFavorite = (id) => {
-        setFavorites((prev) => prev.filter((item) => item._id !== id));
-        toast.success('Removed from favorites');
+    const handleToggleFavorite = async (id) => {
+        try {
+            await api.patch(`/api/media/${id}/favorite`);
+            setFavorites((prev) => prev.filter((item) => item._id !== id));
+            if (selectedPhoto?._id === id) {
+                setSelectedPhoto(null);
+            }
+            toast.success('Removed from favorites');
+            fetchStats?.();
+        } catch (error) {
+            toast.error('Failed to update favorite status');
+        }
     };
 
-    const handleTrashPhoto = (id) => {
-        setFavorites((prev) => prev.filter((item) => item._id !== id));
-        if (selectedPhoto?._id === id) {
-            setSelectedPhoto(null);
+    const handleTrashPhoto = async (id) => {
+        try {
+            await api.patch(`/api/media/${id}/trash`, { restore: false });
+            setFavorites((prev) => prev.filter((item) => item._id !== id));
+            if (selectedPhoto?._id === id) {
+                setSelectedPhoto(null);
+            }
+            toast.success('Moved to trash');
+            fetchStats?.();
+        } catch (error) {
+            toast.error('Failed to move photo to trash');
         }
-        toast.success('Moved to trash');
     };
 
     return (

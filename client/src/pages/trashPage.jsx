@@ -1,37 +1,65 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Trash2, RotateCcw, Play } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { DUMMY_MEDIA } from '../assets/assets';
+import api from '../config/api';
+import { useAuth } from '../context/context';
 import Loading from '../components/common/loading';
 
 export default function TrashPage() {
+    const { fetchStats } = useAuth();
     const [trashItems, setTrashItems] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
+    const fetchTrash = useCallback(async () => {
         setLoading(true);
-        const timer = setTimeout(() => {
-            // Demo trash items (e.g. items 8 to 11)
-            setTrashItems(DUMMY_MEDIA.slice(8, 11));
+        try {
+            const res = await api.get('/api/media/trash');
+            setTrashItems(res.data?.media || []);
+        } catch (error) {
+            console.error('Failed to fetch trash items:', error);
+            toast.error('Failed to load trash');
+        } finally {
             setLoading(false);
-        }, 500);
-        return () => clearTimeout(timer);
+        }
     }, []);
 
-    const handleRestore = (id) => {
-        setTrashItems((prev) => prev.filter((item) => item._id !== id));
-        toast.success('Restored to library');
+    useEffect(() => {
+        fetchTrash();
+    }, [fetchTrash]);
+
+    const handleRestore = async (id) => {
+        try {
+            await api.patch(`/api/media/${id}/trash`, { restore: true });
+            setTrashItems((prev) => prev.filter((item) => item._id !== id));
+            toast.success('Restored to library');
+            fetchStats?.();
+        } catch (error) {
+            toast.error('Failed to restore photo');
+        }
     };
 
-    const handleDeleteForever = (id) => {
-        setTrashItems((prev) => prev.filter((item) => item._id !== id));
-        toast.success('Permanently deleted');
+    const handleDeleteForever = async (id) => {
+        try {
+            await api.delete(`/api/media/${id}`);
+            setTrashItems((prev) => prev.filter((item) => item._id !== id));
+            toast.success('Permanently deleted');
+            fetchStats?.();
+        } catch (error) {
+            toast.error('Failed to delete photo');
+        }
     };
 
-    const handleClearTrash = () => {
-        if (window.confirm('Are you sure you want to permanently clear all items in the trash?')) {
+    const handleClearTrash = async () => {
+        if (!window.confirm('Are you sure you want to permanently clear all items in the trash?')) {
+            return;
+        }
+        try {
+            await api.delete('/api/media/trash/empty');
             setTrashItems([]);
             toast.success('Trash emptied');
+            fetchStats?.();
+        } catch (error) {
+            toast.error('Failed to clear trash');
         }
     };
 

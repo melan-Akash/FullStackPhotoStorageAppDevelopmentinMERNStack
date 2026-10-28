@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { Image, Film, Upload } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { DUMMY_MEDIA } from '../assets/assets';
+import api from '../config/api';
+import { useAuth } from '../context/context';
 import Loading from '../components/common/loading';
 import PhotoGrid from '../components/photos/photoGrid';
 import PhotoLightbox from '../components/photos/photoLightbox';
@@ -10,40 +11,54 @@ import BulkSelectionBar from '../components/photos/bulkSelectionBar';
 
 export default function PhotosPage() {
     const { searchQuery, onOpenUpload, openCreateAlbum } = useOutletContext();
+    const { fetchStats } = useAuth();
     const [photos, setPhotos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedIds, setSelectedIds] = useState([]);
     const [selectedPhoto, setSelectedPhoto] = useState(null);
     const [filter, setFilter] = useState('all');
 
-    useEffect(() => {
+    const fetchPhotos = useCallback(async () => {
         setLoading(true);
-        const timer = setTimeout(() => {
-            let result = [...DUMMY_MEDIA];
-
-            if (filter === 'image') {
-                result = result.filter((item) => item.mediaType === 'image');
-            } else if (filter === 'video') {
-                result = result.filter(
-                    (item) => item.mediaType === 'video' || item.format === 'mp4'
-                );
-            }
-
+        try {
+            const params = {};
             if (searchQuery && searchQuery.trim()) {
-                const q = searchQuery.toLowerCase().trim();
-                result = result.filter(
-                    (item) =>
-                        item.title?.toLowerCase().includes(q) ||
-                        item.objects?.some((obj) => obj.toLowerCase().includes(q))
-                );
+                params.query = searchQuery.trim();
+            }
+            if (filter !== 'all') {
+                params.type = filter;
             }
 
-            setPhotos(result);
+            const res = await api.get('/api/media', { params });
+            setPhotos(res.data?.media || []);
+        } catch (error) {
+            console.error('Failed to fetch media:', error);
+            toast.error(error.response?.data?.message || 'Failed to load photos');
+        } finally {
             setLoading(false);
-        }, 300);
-
-        return () => clearTimeout(timer);
+        }
     }, [searchQuery, filter]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            fetchPhotos();
+        }, 300);
+        return () => clearTimeout(timer);
+    }, [fetchPhotos]);
+
+    // Listen to media-uploaded events
+    useEffect(() => {
+        const handleUploaded = () => {
+            fetchPhotos();
+            fetchStats?.();
+        };
+        window.addEventListener('media-uploaded', handleUploaded);
+        window.addEventListener('photo-uploaded', handleUploaded);
+        return () => {
+            window.removeEventListener('media-uploaded', handleUploaded);
+            window.removeEventListener('photo-uploaded', handleUploaded);
+        };
+    }, [fetchPhotos, fetchStats]);
 
     const handleToggleSelect = (id) => {
         setSelectedIds((prev) =>
@@ -51,42 +66,67 @@ export default function PhotosPage() {
         );
     };
 
-    const handleToggleFavorite = (id) => {
-        let isNowFav = false;
-        setPhotos((prev) =>
-            prev.map((photo) => {
-                if (photo._id === id) {
-                    isNowFav = !photo.isFavorite;
-                    return { ...photo, isFavorite: isNowFav };
-                }
-                return photo;
-            })
-        );
-        toast.success(isNowFav ? 'Added to favorites ⭐' : 'Removed from favorites');
-    };
-
-    const handleTrashPhoto = (id) => {
-        setPhotos((prev) => prev.filter((photo) => photo._id !== id));
-        if (selectedPhoto?._id === id) {
-            setSelectedPhoto(null);
+    const handleToggleFavorite = async (id) => {
+        try {
+            const res = await api.patch(`/api/media/${id}/favorite`);
+            const updated = res.data?.media;
+            setPhotos((prev) =>
+                prev.map((photo) =>
+                    photo._id === id ? { ...photo, isFavorite: updated?.isFavorite } : photo
+                )
+            );
+            if (selectedPhoto?._id === id && updated) {
+                setSelectedPhoto((prev) => ({ ...prev, isFavorite: updated.isFavorite }));
+            }
+            toast.success(updated?.isFavorite ? 'Added to favorites ⭐' : 'Removed from favorites');
+            fetchStats?.();
+        } catch (error) {
+            toast.error('Failed to update favorite status');
         }
-        toast.success('Moved to trash');
     };
 
-    const handleBulkFavorite = () => {
-        setPhotos((prev) =>
-            prev.map((photo) =>
-                selectedIds.includes(photo._id) ? { ...photo, isFavorite: true } : photo
-            )
-        );
-        toast.success(`Marked ${selectedIds.length} item(s) as favorite`);
-        setSelectedIds([]);
+    const handleTrashPhoto = async (id) => {
+        try {
+            await api.patch(`/api/media/${id}/trash`, { restore: false });
+            setPhotos((prev) => prev.filter((photo) => photo._id !== id));
+            if (selectedPhoto?._id === id) {
+                setSelectedPhoto(null);
+            }
+            toast.success('Moved to trash');
+            fetchStats?.();
+        } catch (error) {
+            toast.error('Failed to move photo to trash');
+        }
     };
 
-    const handleBulkTrash = () => {
-        setPhotos((prev) => prev.filter((photo) => !selectedIds.includes(photo._id)));
-        toast.success(`Moved ${selectedIds.length} item(s) to trash`);
-        setSelectedIds([]);
+    const handleBulkFavorite = async () => {
+        try {
+            await Promise.all(selectedIds.map((id) => api.patch(`/api/media/${id}/favorite`)));
+            setPhotos((prev) =>
+                prev.map((photo) =>
+                    selectedIds.includes(photo._id) ? { ...photo, isFavorite: true } : photo
+                )
+            );
+            toast.success(`Updated ${selectedIds.length} item(s)`);
+            setSelectedIds([]);
+            fetchStats?.();
+        } catch (error) {
+            toast.error('Failed to favorite selected items');
+        }
+    };
+
+    const handleBulkTrash = async () => {
+        try {
+            await Promise.all(
+                selectedIds.map((id) => api.patch(`/api/media/${id}/trash`, { restore: false }))
+            );
+            setPhotos((prev) => prev.filter((photo) => !selectedIds.includes(photo._id)));
+            toast.success(`Moved ${selectedIds.length} item(s) to trash`);
+            setSelectedIds([]);
+            fetchStats?.();
+        } catch (error) {
+            toast.error('Failed to move items to trash');
+        }
     };
 
     return (

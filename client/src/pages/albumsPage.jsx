@@ -1,29 +1,48 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { FolderPlus, Plus, Image, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { DUMMY_ALBUMS_DATA } from '../assets/assets';
+import api from '../config/api';
+import { useAuth } from '../context/context';
 import Loading from '../components/common/loading';
 
 export default function AlbumsPage() {
     const { openCreateAlbum } = useOutletContext() || {};
+    const { fetchStats } = useAuth();
     const [albums, setAlbums] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
-    useEffect(() => {
+    const fetchAlbums = useCallback(async () => {
         setLoading(true);
-        const timer = setTimeout(() => {
-            setAlbums(DUMMY_ALBUMS_DATA);
+        try {
+            const res = await api.get('/api/albums');
+            setAlbums(res.data?.albums || []);
+        } catch (error) {
+            console.error('Failed to fetch albums:', error);
+            toast.error('Failed to load albums');
+        } finally {
             setLoading(false);
-        }, 500);
-        return () => clearTimeout(timer);
+        }
     }, []);
 
-    const handleDeleteAlbum = (e, albumId) => {
+    useEffect(() => {
+        fetchAlbums();
+    }, [fetchAlbums]);
+
+    const handleDeleteAlbum = async (e, albumId) => {
         e.stopPropagation();
-        setAlbums((prev) => prev.filter((a) => a._id !== albumId));
-        toast.success('Album deleted');
+        if (!window.confirm('Are you sure you want to delete this album? Photos inside will remain safe.')) {
+            return;
+        }
+        try {
+            await api.delete(`/api/albums/${albumId}`);
+            setAlbums((prev) => prev.filter((a) => a._id !== albumId));
+            toast.success('Album deleted successfully');
+            fetchStats?.();
+        } catch (error) {
+            toast.error('Failed to delete album');
+        }
     };
 
     return (

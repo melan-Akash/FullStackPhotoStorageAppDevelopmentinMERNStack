@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { FolderPlus, X } from 'lucide-react';
 import toast from 'react-hot-toast';
+import api from '../../config/api';
+import { useAuth } from '../../context/context';
 
 export default function CreateAlbumModel({
     isOpen,
@@ -8,6 +10,7 @@ export default function CreateAlbumModel({
     onAlbumCreated,
     initialPhotoIds = [],
 }) {
+    const { fetchStats } = useAuth();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [loading, setLoading] = useState(false);
@@ -19,18 +22,19 @@ export default function CreateAlbumModel({
         if (!title.trim()) return;
         setLoading(true);
         try {
-            const newAlbum = {
-                _id: 'album_' + Date.now(),
+            const res = await api.post('/api/albums', {
                 title: title.trim(),
                 description: description.trim(),
-                photos: initialPhotoIds,
-                createdAt: new Date().toISOString(),
-            };
-            toast.success('Album created successfully');
+                photoIds: initialPhotoIds,
+            });
+            const newAlbum = res.data?.album;
+            toast.success(`Album "${title}" created successfully`);
+            fetchStats?.();
             handleClose();
             onAlbumCreated?.(newAlbum);
-        } catch {
-            toast.error('Failed to create album');
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Failed to create album');
+        } finally {
             setLoading(false);
         }
     };
@@ -99,7 +103,7 @@ export default function CreateAlbumModel({
                             disabled={loading || !title.trim()}
                             className="btn-primary"
                         >
-                            Create Album
+                            {loading ? 'Creating...' : 'Create Album'}
                         </button>
                     </div>
                 </form>
@@ -107,4 +111,3 @@ export default function CreateAlbumModel({
         </div>
     );
 }
-

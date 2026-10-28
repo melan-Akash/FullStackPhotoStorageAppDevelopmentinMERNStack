@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Image, Star, FolderPlus, Trash2, Plus, X, HardDrive } from 'lucide-react';
-import { DUMMY_STATS } from '../../assets/assets';
+import { useAuth } from '../../context/context';
 
 export default function Sidebar({
     onCreateAlbumClick,
@@ -9,11 +9,11 @@ export default function Sidebar({
     isMobileOpen = false,
     onCloseMobile,
 }) {
-    const [stats, setStats] = useState(DUMMY_STATS);
+    const { stats, fetchStats } = useAuth();
 
     useEffect(() => {
-        setStats(DUMMY_STATS);
-    }, []);
+        fetchStats?.();
+    }, [fetchStats]);
 
     const navItems = [
         { to: '/', label: 'Photos & Videos', icon: Image },
