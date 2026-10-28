@@ -2,9 +2,114 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    
+    <!-- Primary SEO Meta Tags -->
+    <title>ImageCloud - AI-Powered Cloud Photo & Video Organizer</title>
+    <meta name="title" content="ImageCloud - AI-Powered Cloud Photo & Video Organizer" />
+    <meta name="description" content="ImageCloud is a modern AI-powered photo and video organizer. Securely backup high-resolution media, auto-detect objects with Google AI, convert Apple HEIC to JPEG, create albums, and search visual memories instantly." />
+    <meta name="keywords" content="ImageCloud, photo storage, video organizer, AI auto-tagging, cloud photo backup, Apple HEIC upload, Google auto tagging, MERN stack photo app, Cloudinary media storage, album organizer" />
+    <meta name="author" content="Melan Akash" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <link rel="canonical" href="https://imagecloud.app/" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ImageCloud - Backup & Organize</title>
+    <link rel="apple-touch-icon" href="/logo.png" />
+    <meta name="theme-color" content="#dc2626" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://imagecloud.app/" />
+    <meta property="og:site_name" content="ImageCloud" />
+    <meta property="og:title" content="ImageCloud - AI-Powered Cloud Photo & Video Organizer" />
+    <meta property="og:description" content="Store, organize, and discover your photos and videos with AI-powered tagging and instant search. Supports Apple HEIC, 4K videos, albums, and live storage tracking." />
+    <meta property="og:image" content="https://imagecloud.app/login_ribbon.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="ImageCloud AI-Powered Photo Platform" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://imagecloud.app/" />
+    <meta name="twitter:title" content="ImageCloud - AI-Powered Cloud Photo & Video Organizer" />
+    <meta name="twitter:description" content="Store, organize, and discover your photos and videos with AI-powered tagging and instant search. Supports Apple HEIC, 4K videos, albums, and live storage tracking." />
+    <meta name="twitter:image" content="https://imagecloud.app/login_ribbon.png" />
+
+    <!-- AEO (Answer Engine Optimization) & Semantic Search - Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "@id": "https://imagecloud.app/#webapp",
+          "name": "ImageCloud",
+          "url": "https://imagecloud.app/",
+          "applicationCategory": "MultimediaApplication",
+          "operatingSystem": "All modern browsers (Chrome, Safari, Firefox, Edge, iOS, Android)",
+          "browserRequirements": "Requires JavaScript. Requires HTML5.",
+          "description": "ImageCloud is an intelligent cloud photo and video organizer featuring AI-driven auto-tagging, universal Apple HEIC/HEIF conversion, album curation, and lightning-fast semantic search.",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock"
+          },
+          "featureList": [
+            "AI Object Detection & Semantic Search via Google Auto-Tagging",
+            "Automatic Apple HEIC/HEIF conversion to universal JPEG",
+            "Support for high-resolution photos and 4K videos",
+            "Custom album creation and story grouping",
+            "Mobile-optimized progressive experience with bottom navigation",
+            "End-to-End JWT user authentication and private cloud storage",
+            "Live storage quota analytics and file management"
+          ],
+          "creator": {
+            "@type": "Person",
+            "name": "Melan Akash",
+            "url": "https://github.com/melan-Akash"
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://imagecloud.app/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is ImageCloud?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "ImageCloud is a full-stack MERN cloud photo and video management platform integrated with Cloudinary and Google AI Auto-Tagging for seamless backup, organization, and search."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Does ImageCloud support Apple iPhone HEIC files?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. ImageCloud natively accepts .HEIC and .HEIF image files directly from iPhones and Macs, converting them via Cloudinary into universal high-quality JPEG images readable by any web browser."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How does the AI search functionality work?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "When photos are uploaded, Google Auto-Tagging detects visual objects (e.g., dog, car, mountain, beach) and indexes them in MongoDB. Users can instantly filter their library by typing object names into the search bar."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is ImageCloud accessible on mobile devices?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, ImageCloud features a dedicated native mobile bottom navigation bar, touch-friendly select and favorite controls, and responsive lightbox viewer optimized for iOS and Android devices."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
   </head>
   <body class="bg-white antialiased text-slate-800">
     <div id="root"></div>

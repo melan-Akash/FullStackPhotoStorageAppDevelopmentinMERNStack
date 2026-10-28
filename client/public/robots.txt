@@ -1,0 +1,20 @@
+# ImageCloud Robots.txt
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# AI Crawlers / Answer Engines (Perplexity, GPTBot, ClaudeBot, Google-Extended)
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# Sitemap
+Sitemap: https://imagecloud.app/sitemap.xml
