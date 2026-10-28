@@ -42,11 +42,7 @@ export default function Navbar({
     };
 
     return (
-        <>
-            <div className="bg-black text-white text-center text-sm p-1">
-                This is a sample UI platform designed exclusively for testing and prototyping.
-            </div>
-            <header className="navbar-header">
+        <header className="navbar-header">
                 <div className="navbar-brand">
                     <button
                         onClick={onToggleSidebar}
@@ -129,7 +125,6 @@ export default function Navbar({
                     </div>
                 </div>
             </header>
-        </>
-    );
-}
+        );
+    }
 
