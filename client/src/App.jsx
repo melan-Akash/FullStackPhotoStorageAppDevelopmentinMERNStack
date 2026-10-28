@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { useAuth } from './context/context';
 import AuthPage from './pages/authPage';
 import AppLayout from './components/layout/appLayout';
 import PhotosPage from './pages/photosPage';
@@ -7,8 +8,15 @@ import FavoritePage from './pages/favoritePage';
 import AlbumsPage from './pages/albumsPage';
 import AlbumDetailPage from './pages/albumDetailPage';
 import TrashPage from './pages/trashPage';
+import Loading from './components/common/loading';
 
 export default function App() {
+    const { token, loading } = useAuth();
+
+    if (loading) {
+        return <Loading fullScreen />;
+    }
+
     return (
         <>
             <Toaster
@@ -40,10 +48,18 @@ export default function App() {
                 }}
             />
             <Routes>
-                <Route path="/login" element={<AuthPage />} />
-                <Route path="/register" element={<AuthPage />} />
+                {/* Auth routes: if already logged in, redirect to home */}
+                <Route
+                    path="/login"
+                    element={token ? <Navigate to="/" replace /> : <AuthPage />}
+                />
+                <Route
+                    path="/register"
+                    element={token ? <Navigate to="/" replace /> : <AuthPage />}
+                />
 
-                <Route element={<AppLayout />}>
+                {/* Protected App routes: if not logged in, redirect to /login */}
+                <Route element={token ? <AppLayout /> : <Navigate to="/login" replace />}>
                     <Route path="/" element={<PhotosPage />} />
                     <Route path="/photos" element={<PhotosPage />} />
                     <Route path="/favorites" element={<FavoritePage />} />
@@ -57,4 +73,3 @@ export default function App() {
         </>
     );
 }
-   

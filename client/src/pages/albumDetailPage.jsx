@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Calendar, Plus, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { DUMMY_ALBUM_DETAIL } from '../assets/assets';
+import api from '../config/api';
+import { useAuth } from '../context/context';
 import Loading from '../components/common/loading';
 import PhotoGrid from '../components/photos/photoGrid';
 import PhotoLightbox from '../components/photos/photoLightbox';
@@ -11,71 +12,113 @@ import AddPhotosModal from '../components/albums/addPhotosModal';
 export default function AlbumDetailPage() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { fetchStats } = useAuth();
     const [album, setAlbum] = useState(null);
     const [loading, setLoading] = useState(true);
     const [selectedIds, setSelectedIds] = useState([]);
     const [selectedPhoto, setSelectedPhoto] = useState(null);
     const [isAddOpen, setIsAddOpen] = useState(false);
 
-    useEffect(() => {
+    const fetchAlbum = useCallback(async () => {
         setLoading(true);
-        const timer = setTimeout(() => {
-            setAlbum(DUMMY_ALBUM_DETAIL);
+        try {
+            const res = await api.get(`/api/albums/${id}`);
+            setAlbum(res.data?.album || null);
+        } catch (error) {
+            console.error('Failed to load album:', error);
+            toast.error(error.response?.data?.message || 'Failed to load album');
+        } finally {
             setLoading(false);
-        }, 500);
-        return () => clearTimeout(timer);
+        }
     }, [id]);
 
-    const handleRemoveFromAlbum = (photoId) => {
-        if (!album) return;
-        setAlbum((prev) => ({
-            ...prev,
-            photos: prev.photos.filter((p) => p._id !== photoId),
-        }));
-        toast.success('Removed photo from album');
-    };
+    useEffect(() => {
+        fetchAlbum();
+    }, [fetchAlbum]);
 
-    const handleToggleFavorite = (photoId) => {
-        if (!album) return;
-        let isNowFav = false;
-        setAlbum((prev) => ({
-            ...prev,
-            photos: prev.photos.map((p) => {
-                if (p._id === photoId) {
-                    isNowFav = !p.isFavorite;
-                    return { ...p, isFavorite: isNowFav };
-                }
-                return p;
-            }),
-        }));
-        toast.success(isNowFav ? 'Added to favorites ⭐' : 'Removed from favorites');
-    };
-
-    const handleDeleteAlbum = () => {
-        if (
-            window.confirm(
-                'Are you sure you want to delete this album? Photos inside will remain safe in your library.'
-            )
-        ) {
-            toast.success('Album deleted successfully');
-            navigate('/albums');
+    const handleRemoveFromAlbum = async (photoId) => {
+        try {
+            await api.delete(`/api/albums/${id}/photos/${photoId}`);
+            setAlbum((prev) => ({
+                ...prev,
+                photos: prev.photos.filter((p) => p._id !== photoId),
+            }));
+            toast.success('Removed photo from album');
+        } catch (error) {
+            toast.error('Failed to remove photo from album');
         }
     };
 
-    const handlePhotosAdded = (newPhotos) => {
-        if (!album) return;
-        setAlbum((prev) => ({
-            ...prev,
-            photos: [...prev.photos, ...newPhotos],
-        }));
-        toast.success(`Added ${newPhotos.length} photo(s) to "${album.title}"`);
+    const handleToggleFavorite = async (photoId) => {
+        try {
+            const res = await api.patch(`/api/media/${photoId}/favorite`);
+            const updated = res.data?.media;
+            setAlbum((prev) => ({
+                ...prev,
+                photos: prev.photos.map((p) =>
+                    p._id === photoId ? { ...p, isFavorite: updated?.isFavorite } : p
+                ),
+            }));
+            if (selectedPhoto?._id === photoId && updated) {
+                setSelectedPhoto((prev) => ({ ...prev, isFavorite: updated.isFavorite }));
+            }
+            toast.success(updated?.isFavorite ? 'Added to favorites ⭐' : 'Removed from favorites');
+            fetchStats?.();
+        } catch (error) {
+            toast.error('Failed to update favorite status');
+        }
+    };
+
+    const handleDeleteAlbum = async () => {
+        if (
+            !window.confirm(
+                'Are you sure you want to delete this album? Photos inside will remain safe in your library.'
+            )
+        ) {
+            return;
+        }
+        try {
+            await api.delete(`/api/albums/${id}`);
+            toast.success('Album deleted successfully');
+            fetchStats?.();
+            navigate('/albums');
+        } catch (error) {
+            toast.error('Failed to delete album');
+        }
+    };
+
+    const handlePhotosAdded = async (addedPhotos) => {
+        try {
+            const photoIds = addedPhotos.map((p) => p._id);
+            const res = await api.post(`/api/albums/${id}/photos`, { photoIds });
+            if (res.data?.album) {
+                setAlbum(res.data.album);
+            } else {
+                fetchAlbum();
+            }
+            toast.success(`Added ${photoIds.length} photo(s) to "${album?.title}"`);
+        } catch (error) {
+            toast.error('Failed to add photos to album');
+        }
     };
 
     if (loading) {
         return <Loading className="py-20" />;
     }
 
-    if (!album) return null;
+    if (!album) {
+        return (
+            <div className="text-center py-20">
+                <p className="text-slate-500">Album not found</p>
+                <button
+                    onClick={() => navigate('/albums')}
+                    className="mt-4 px-4 py-2 bg-slate-900 text-white rounded-full text-xs"
+                >
+                    Back to Albums
+                </button>
+            </div>
+        );
+    }
 
     const existingPhotoIds = album.photos ? album.photos.map((p) => p._id) : [];
 

@@ -2,8 +2,11 @@ import { useState, useRef } from 'react';
 import { X, Film } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Loading from '../common/loading';
+import api from '../../config/api';
+import { useAuth } from '../../context/context';
 
 export default function UploadModal({ isOpen, onClose, onUploadSuccess }) {
+    const { fetchStats } = useAuth();
     const [files, setFiles] = useState([]);
     const [previews, setPreviews] = useState([]);
     const [uploading, setUploading] = useState(false);
@@ -39,15 +42,26 @@ export default function UploadModal({ isOpen, onClose, onUploadSuccess }) {
     };
 
     const handleUpload = async () => {
+        if (files.length === 0) return;
         setUploading(true);
+        const formData = new FormData();
+        files.forEach((file) => {
+            formData.append('media', file);
+        });
+
         try {
-            setTimeout(() => {
-                toast.success('Media uploaded successfully');
-                handleClose();
-                onUploadSuccess?.();
-            }, 800);
-        } catch {
-            toast.error('Failed to upload media');
+            const res = await api.post('/api/media/upload', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            toast.success(res.data?.message || `Successfully uploaded ${files.length} items`);
+            fetchStats?.();
+            handleClose();
+            onUploadSuccess?.(res.data?.media);
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Failed to upload media');
+        } finally {
             setUploading(false);
         }
     };
