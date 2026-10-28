@@ -1,16 +1,17 @@
 import mongoose from 'mongoose';
 
-// MongoDB database connection setup
+// MongoDB database connection setup with connection caching for serverless environments (Vercel)
 const connectDB = async () => {
-  try {
-    mongoose.connection.on('connected', () => {
-      console.log('Database connected successfully');
-    });
+  if (mongoose.connection.readyState >= 1) {
+    return;
+  }
 
-    await mongoose.connect(process.env.MONGO_URI);
+  try {
+    const conn = await mongoose.connect(process.env.MONGO_URI);
+    console.log(`Database connected successfully: ${conn.connection.host}`);
   } catch (error) {
     console.error(`Database connection error: ${error.message}`);
-    process.exit(1);
+    throw error;
   }
 };
 
