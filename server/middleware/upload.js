@@ -10,10 +10,17 @@ export const upload = multer({
     files: 20, // Max 20 files per request
   },
   fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith('image/') || file.mimetype.startsWith('video/')) {
+    const ext = file.originalname?.split('.').pop()?.toLowerCase();
+    const isHeic =
+      ext === 'heic' ||
+      ext === 'heif' ||
+      file.mimetype === 'image/heic' ||
+      file.mimetype === 'image/heif';
+
+    if (file.mimetype.startsWith('image/') || file.mimetype.startsWith('video/') || isHeic) {
       cb(null, true);
     } else {
-      cb(new Error('Only image and video files are allowed'), false);
+      cb(new Error('Only image, video, and HEIC files are allowed'), false);
     }
   },
 });

@@ -1,9 +1,15 @@
 import { useState, useRef } from 'react';
-import { X, Film } from 'lucide-react';
+import { X, Film, Image as ImageIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Loading from '../common/loading';
 import api from '../../config/api';
 import { useAuth } from '../../context/context';
+
+const isHeicFile = (file) => {
+    if (!file) return false;
+    const ext = file.name?.split('.').pop()?.toLowerCase();
+    return ext === 'heic' || ext === 'heif' || file.type === 'image/heic' || file.type === 'image/heif';
+};
 
 export default function UploadModal({ isOpen, onClose, onUploadSuccess }) {
     const { fetchStats } = useAuth();
@@ -18,23 +24,27 @@ export default function UploadModal({ isOpen, onClose, onUploadSuccess }) {
     const handleFiles = (incomingFiles) => {
         if (!incomingFiles) return;
         const validFiles = Array.from(incomingFiles).filter(
-            (f) => f.type.startsWith('image/') || f.type.startsWith('video/')
+            (f) => f.type.startsWith('image/') || f.type.startsWith('video/') || isHeicFile(f)
         );
         if (validFiles.length === 0) {
-            toast.error('Please select valid image or video files.');
+            toast.error('Please select valid image, video, or HEIC files.');
             return;
         }
         setFiles((prev) => [...prev, ...validFiles]);
-        const newPreviews = validFiles.map((file) => ({
-            url: URL.createObjectURL(file),
-            isVideo: file.type.startsWith('video/'),
-            name: file.name,
-        }));
+        const newPreviews = validFiles.map((file) => {
+            const isHeic = isHeicFile(file);
+            return {
+                url: isHeic ? '' : URL.createObjectURL(file),
+                isVideo: file.type.startsWith('video/'),
+                isHeic: isHeic,
+                name: file.name,
+            };
+        });
         setPreviews((prev) => [...prev, ...newPreviews]);
     };
 
     const handleRemove = (index) => {
-        if (previews[index]) {
+        if (previews[index]?.url) {
             URL.revokeObjectURL(previews[index].url);
         }
         setFiles((prev) => prev.filter((_, i) => i !== index));
@@ -67,7 +77,9 @@ export default function UploadModal({ isOpen, onClose, onUploadSuccess }) {
     };
 
     const handleClose = () => {
-        previews.forEach((p) => URL.revokeObjectURL(p.url));
+        previews.forEach((p) => {
+            if (p.url) URL.revokeObjectURL(p.url);
+        });
         setFiles([]);
         setPreviews([]);
         setUploading(false);
@@ -110,13 +122,13 @@ export default function UploadModal({ isOpen, onClose, onUploadSuccess }) {
                             Drag & drop <span className="text-red-600">photos & videos</span> here, or Browse
                         </h3>
                         <p className="text-xs text-slate-400 mt-1">
-                            Supports PNG, JPG, WEBP, GIF, MP4, MOV, WEBM (up to 100MB each)
+                            Supports PNG, JPG, WEBP, HEIC, GIF, MP4, MOV, WEBM (up to 100MB each)
                         </p>
                         <input
                             ref={fileInputRef}
                             type="file"
                             multiple
-                            accept="image/*,video/*"
+                            accept="image/*,video/*,.heic,.HEIC,.heif,.HEIF"
                             className="hidden"
                             onChange={(e) => handleFiles(e.target.files)}
                         />
@@ -130,7 +142,9 @@ export default function UploadModal({ isOpen, onClose, onUploadSuccess }) {
                                 </span>
                                 <button
                                     onClick={() => {
-                                        previews.forEach((p) => URL.revokeObjectURL(p.url));
+                                        previews.forEach((p) => {
+                                            if (p.url) URL.revokeObjectURL(p.url);
+                                        });
                                         setFiles([]);
                                         setPreviews([]);
                                     }}
@@ -157,6 +171,16 @@ export default function UploadModal({ isOpen, onClose, onUploadSuccess }) {
                                                     <Film className="size-3 text-orange-400" />
                                                     <span>Video</span>
                                                 </div>
+                                            </div>
+                                        ) : preview.isHeic ? (
+                                            <div className="size-full relative bg-gradient-to-br from-slate-800 to-slate-950 flex flex-col items-center justify-center p-2 text-center select-none">
+                                                <span className="px-2 py-0.5 rounded text-[11px] font-bold tracking-wider bg-rose-500/20 text-rose-400 border border-rose-500/30 mb-1">
+                                                    HEIC
+                                                </span>
+                                                <span className="text-[10px] text-slate-300 truncate max-w-full px-1" title={preview.name}>
+                                                    {preview.name}
+                                                </span>
+                                                <span className="text-[9px] text-slate-500 mt-0.5">Apple Photo</span>
                                             </div>
                                         ) : (
                                             <img
