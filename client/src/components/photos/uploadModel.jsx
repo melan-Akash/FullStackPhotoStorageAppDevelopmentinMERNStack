@@ -155,7 +155,7 @@ export default function UploadModal({ isOpen, onClose, onUploadSuccess }) {
                                     Clear all
                                 </button>
                             </div>
-                            <div className="grid grid-cols-4 gap-3 max-h-48 overflow-y-auto p-1">
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 max-h-48 overflow-y-auto p-1">
                                 {previews.map((preview, idx) => (
                                     <div
                                         key={idx}

@@ -64,35 +64,35 @@ export const PhotoLightbox = ({ photos, currentPhoto, onClose, onToggleFavorite,
         <div className="lightbox-backdrop">
             {/* Top Toolbar */}
             <div className="lightbox-toolbar">
-                <div className="flex items-center gap-4">
-                    <button onClick={onClose} className="p-2 hover:bg-white/20 rounded-full transition cursor-pointer text-white" title="Close (Esc)">
+                <div className="flex items-center gap-2 sm:gap-4 overflow-hidden">
+                    <button onClick={onClose} className="p-1.5 sm:p-2 hover:bg-white/20 rounded-full transition cursor-pointer text-white shrink-0" title="Close (Esc)">
                         <X className="size-5" />
                     </button>
-                    <div>
-                        <h3 className="text-sm font-semibold truncate max-w-sm">{activePhoto.title}</h3>
-                        <p className="text-[11px] text-white/70">
+                    <div className="min-w-0">
+                        <h3 className="text-xs sm:text-sm font-semibold truncate sm:max-w-xs">{activePhoto.title}</h3>
+                        <p className="text-[10px] sm:text-[11px] text-white/70">
                             {currentIndex + 1} of {photos.length}
                         </p>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1 sm:gap-2 shrink-0">
                     <button onClick={() => onToggleFavorite(activePhoto._id)} className={`lightbox-btn ${activePhoto.isFavorite ? "bg-amber-400 text-slate-900" : ""}`} title="Favorite">
-                        <StarIcon className={`size-5 ${activePhoto.isFavorite ? "fill-slate-900" : ""}`} />
+                        <StarIcon className={`size-4 sm:size-5 ${activePhoto.isFavorite ? "fill-slate-900" : ""}`} />
                     </button>
 
                     {onAddToAlbum && (
                         <button onClick={() => onAddToAlbum(activePhoto)} className="lightbox-btn" title="Add to Album">
-                            <FolderPlus className="size-5" />
+                            <FolderPlus className="size-4 sm:size-5" />
                         </button>
                     )}
 
                     <button onClick={handleDownload} className="lightbox-btn" title="Download">
-                        <Download className="size-5" />
+                        <Download className="size-4 sm:size-5" />
                     </button>
 
                     <button onClick={() => setShowInfo(!showInfo)} className={`lightbox-btn ${showInfo ? "bg-white/30" : ""}`} title="Photo details">
-                        <InfoIcon className="size-5" />
+                        <InfoIcon className="size-4 sm:size-5" />
                     </button>
 
                     <button
@@ -107,7 +107,7 @@ export const PhotoLightbox = ({ photos, currentPhoto, onClose, onToggleFavorite,
                         className="lightbox-btn hover:bg-rose-500/80!"
                         title="Move to trash"
                     >
-                        <Trash2 className="size-5" />
+                        <Trash2 className="size-4 sm:size-5" />
                     </button>
                 </div>
             </div>
@@ -116,13 +116,13 @@ export const PhotoLightbox = ({ photos, currentPhoto, onClose, onToggleFavorite,
             <div className="flex-1 relative flex items-center justify-center overflow-hidden">
                 {/* Previous button */}
                 {photos.length > 1 && (
-                    <button onClick={handlePrev} className="lightbox-nav-btn left-4" title="Previous photo">
-                        <ChevronLeftIcon className="size-6" />
+                    <button onClick={handlePrev} className="lightbox-nav-btn left-2 sm:left-4" title="Previous photo">
+                        <ChevronLeftIcon className="size-5 sm:size-6" />
                     </button>
                 )}
 
                 {/* Media Display */}
-                <div className="size-full p-4 flex items-center justify-center">
+                <div className="size-full p-2 sm:p-4 flex items-center justify-center">
                     {activePhoto.mediaType === "video" || activePhoto.format === "mp4" || activePhoto.format === "mov" || activePhoto.format === "webm" || activePhoto.url?.endsWith(".mp4") ? (
                         <div key={activePhoto._id} className="w-full max-w-4xl max-h-[82vh] flex items-center justify-center overflow-hidden rounded-2xl shadow-2xl bg-black">
                             
@@ -135,8 +135,8 @@ export const PhotoLightbox = ({ photos, currentPhoto, onClose, onToggleFavorite,
 
                 {/* Next button */}
                 {photos.length > 1 && (
-                    <button onClick={handleNext} className="lightbox-nav-btn right-4" title="Next">
-                        <ChevronRightIcon className="size-6" />
+                    <button onClick={handleNext} className="lightbox-nav-btn right-2 sm:right-4" title="Next">
+                        <ChevronRightIcon className="size-5 sm:size-6" />
                     </button>
                 )}
 

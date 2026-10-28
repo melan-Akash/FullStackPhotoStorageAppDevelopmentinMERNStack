@@ -53,7 +53,7 @@ body {
 
 /* Layout & Navigation */
 .app-main-content {
-    @apply flex-1 overflow-y-auto min-h-0 p-4 sm:p-6 md:p-8 bg-slate-50/50;
+    @apply flex-1 overflow-y-auto min-h-0 p-3 sm:p-6 md:p-8 bg-slate-50/50 pb-20 md:pb-8;
 }
 
 .sidebar-container {
@@ -69,7 +69,7 @@ body {
 }
 
 .sidebar-backdrop {
-    @apply fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-40 md:hidden transition-opacity duration-200;
+    @apply fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 md:hidden transition-opacity duration-200;
 }
 
 .sidebar-mobile-header {
@@ -175,11 +175,11 @@ body {
 }
 
 .photo-card-select-inactive {
-    @apply bg-white/80 backdrop-blur-xs text-transparent group-hover:text-slate-400 group-hover:bg-white hover:scale-110 opacity-0 group-hover:opacity-100;
+    @apply bg-white/80 backdrop-blur-sm text-transparent group-hover:text-slate-400 group-hover:bg-white hover:scale-110 opacity-70 sm:opacity-0 sm:group-hover:opacity-100;
 }
 
 .photo-card-action-btn {
-    @apply p-1.5 rounded-full transition-all cursor-pointer bg-white/80 backdrop-blur-xs text-slate-600 hover:text-red-600 hover:bg-white opacity-0 group-hover:opacity-100;
+    @apply p-1.5 rounded-full transition-all cursor-pointer bg-white/80 backdrop-blur-sm text-slate-600 hover:text-red-600 hover:bg-white opacity-80 sm:opacity-0 sm:group-hover:opacity-100;
 }
 
 .photo-card-favorite-active {
@@ -187,7 +187,7 @@ body {
 }
 
 .photo-card-favorite-inactive {
-    @apply p-1.5 rounded-full transition-all cursor-pointer bg-white/80 backdrop-blur-xs text-slate-600 hover:text-amber-500 hover:bg-white opacity-0 group-hover:opacity-100;
+    @apply p-1.5 rounded-full transition-all cursor-pointer bg-white/80 backdrop-blur-sm text-slate-600 hover:text-amber-500 hover:bg-white opacity-70 sm:opacity-0 sm:group-hover:opacity-100;
 }
 
 .photo-card-title {
@@ -196,7 +196,7 @@ body {
 
 /* Modals & Dialogs */
 .modal-backdrop {
-    @apply fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs transition-opacity duration-150;
+    @apply fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-150;
 }
 
 .modal-box-md {
@@ -204,23 +204,23 @@ body {
 }
 
 .modal-box-lg {
-    @apply bg-white rounded-2xl border border-slate-200 w-full max-w-xl overflow-hidden flex flex-col max-h-[85vh];
+    @apply bg-white rounded-2xl border border-slate-200 w-full max-w-xl overflow-hidden flex flex-col max-h-[90vh];
 }
 
 .modal-box-xl {
-    @apply bg-white rounded-2xl border border-slate-200 w-full max-w-2xl overflow-hidden flex flex-col max-h-[85vh];
+    @apply bg-white rounded-2xl border border-slate-200 w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh];
 }
 
 .modal-header {
-    @apply p-5 border-b border-slate-100 flex items-center justify-between;
+    @apply p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between;
 }
 
 .modal-footer {
-    @apply p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end;
+    @apply p-3 sm:p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end;
 }
 
 .upload-dropzone {
-    @apply border rounded-xl p-8 py-16 flex flex-col items-center justify-center text-center cursor-pointer border-dashed transition-all;
+    @apply border rounded-xl p-4 py-8 sm:p-8 sm:py-16 flex flex-col items-center justify-center text-center cursor-pointer border-dashed transition-all;
 }
 
 .upload-dropzone-active {
@@ -254,7 +254,7 @@ body {
 
 /* Bulk Selection Bar */
 .bulk-bar-container {
-    @apply fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-full px-5 py-3 flex items-center gap-4 text-slate-800 transition-all duration-200 select-none;
+    @apply fixed bottom-16 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-full px-3.5 sm:px-5 py-2 sm:py-3 flex items-center gap-2 sm:gap-4 text-slate-800 shadow-xl transition-all duration-200 select-none max-w-[95vw];
 }
 
 .bulk-bar-btn {
@@ -271,19 +271,19 @@ body {
 }
 
 .lightbox-toolbar {
-    @apply h-16 px-6 bg-linear-to-b from-black/60 to-transparent flex items-center justify-between text-white shrink-0 z-20;
+    @apply h-14 sm:h-16 px-3 sm:px-6 bg-linear-to-b from-black/70 to-transparent flex items-center justify-between text-white shrink-0 z-20;
 }
 
 .lightbox-btn {
-    @apply p-2.5 hover:bg-white/20 rounded-full transition cursor-pointer text-white;
+    @apply p-2 sm:p-2.5 hover:bg-white/20 rounded-full transition cursor-pointer text-white;
 }
 
 .lightbox-nav-btn {
-    @apply p-3 bg-black/40 hover:bg-black/70 text-white rounded-full transition cursor-pointer z-10;
+    @apply p-2 sm:p-3 bg-black/40 hover:bg-black/70 text-white rounded-full transition cursor-pointer z-10;
 }
 
 .lightbox-drawer {
-    @apply absolute right-0 top-0 bottom-0 w-80 bg-white text-slate-800 p-6 overflow-y-auto transition-transform duration-200 z-30;
+    @apply absolute right-0 top-0 bottom-0 w-80 max-w-[85vw] bg-white text-slate-800 p-4 sm:p-6 overflow-y-auto transition-transform duration-200 z-30 shadow-2xl;
 }
 
 /* Album & Empty State Cards */

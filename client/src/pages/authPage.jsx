@@ -59,9 +59,9 @@ export default function AuthPage() {
     };
 
     return (
-        <div className="w-full bg-white h-screen rounded-[30px] sm:rounded-[38px] overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-160 lg:min-h-180">
+        <div className="w-full bg-white min-h-screen lg:h-screen rounded-none sm:rounded-[38px] overflow-y-auto lg:overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-160 lg:min-h-180">
             {/* Left Column - Branding Banner */}
-            <div className="relative lg:col-span-6 p-2 sm:p-3 flex flex-col">
+            <div className="hidden lg:flex relative lg:col-span-6 p-2 sm:p-3 flex-col">
                 <div className="relative size-full rounded-[26px] sm:rounded-4xl overflow-hidden flex flex-col justify-between p-8 sm:p-12 text-white bg-black">
                     <img
                         src="/login_ribbon.png"
@@ -79,7 +79,7 @@ export default function AuthPage() {
             </div>
 
             {/* Right Column - Auth Form */}
-            <div className="lg:col-span-6 bg-white px-8 py-10 sm:px-12 sm:py-14 lg:px-16 lg:py-16 flex flex-col justify-between">
+            <div className="lg:col-span-6 bg-white px-6 py-8 sm:px-12 sm:py-14 lg:px-16 lg:py-16 flex flex-col justify-between min-h-screen lg:min-h-0">
                 <div className="hidden lg:block" />
 
                 <div className="max-w-md w-full mx-auto my-auto py-2">

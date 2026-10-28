@@ -49,11 +49,11 @@ export default function AlbumsPage() {
         <div className="max-w-7xl mx-auto space-y-6">
             <div className="flex items-center justify-between pb-2 border-b border-slate-200/60">
                 <div>
-                    <h2 className="text-2xl font-medium text-slate-900 tracking-tight flex items-center gap-2">
-                        <FolderPlus className="size-6 text-red-600" />
+                    <h2 className="text-xl sm:text-2xl font-medium text-slate-900 tracking-tight flex items-center gap-2">
+                        <FolderPlus className="size-5 sm:size-6 text-red-600" />
                         Albums
                         {albums.length > 0 && (
-                            <span className="text-sm font-medium text-slate-400 bg-slate-100 px-2.5 py-0.5 rounded-full">
+                            <span className="text-xs sm:text-sm font-medium text-slate-400 bg-slate-100 px-2 sm:px-2.5 py-0.5 rounded-full">
                                 {albums.length}
                             </span>
                         )}
@@ -64,7 +64,7 @@ export default function AlbumsPage() {
                 </div>
                 <button
                     onClick={() => openCreateAlbum?.()}
-                    className="flex items-center gap-1.5 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded-full transition cursor-pointer"
+                    className="flex items-center gap-1.5 px-3 sm:px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded-full transition cursor-pointer shrink-0"
                 >
                     <Plus className="size-4" />
                     <span>New Album</span>
@@ -74,7 +74,7 @@ export default function AlbumsPage() {
             {loading ? (
                 <Loading className="py-20" />
             ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-5">
                     <div onClick={() => openCreateAlbum?.()} className="album-card-create">
                         <div className="size-12 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center mb-4">
                             <Plus className="size-6" />

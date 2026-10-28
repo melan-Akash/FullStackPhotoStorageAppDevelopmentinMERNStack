@@ -131,12 +131,12 @@ export default function PhotosPage() {
 
     return (
         <div className="max-w-7xl mx-auto space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200/60">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 pb-2 border-b border-slate-200/60">
                 <div>
-                    <h2 className="text-2xl font-medium text-slate-900 tracking-tight flex items-center gap-2">
+                    <h2 className="text-xl sm:text-2xl font-medium text-slate-900 tracking-tight flex items-center gap-2">
                         Photos & Videos
                         {photos.length > 0 && (
-                            <span className="text-sm font-semibold text-slate-400 bg-slate-100 px-2.5 py-0.5 rounded-full">
+                            <span className="text-xs sm:text-sm font-semibold text-slate-400 bg-slate-100 px-2 sm:px-2.5 py-0.5 rounded-full">
                                 {photos.length}
                             </span>
                         )}
@@ -146,7 +146,7 @@ export default function PhotosPage() {
                     </p>
                 </div>
 
-                <div className="flex items-center gap-2.5">
+                <div className="flex items-center gap-2 sm:gap-2.5 self-start sm:self-auto">
                     <div className="flex items-center bg-slate-100 p-1 rounded-full text-xs font-medium text-slate-600">
                         <button
                             onClick={() => setFilter('all')}

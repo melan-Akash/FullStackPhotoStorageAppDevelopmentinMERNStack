@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation, NavLink } from 'react-router-dom';
+import { Image, Star, FolderPlus, Trash2 } from 'lucide-react';
 import Navbar from './navbar';
 import Sidebar from './sidebar';
 import UploadModal from '../photos/uploadModel';
@@ -31,6 +32,13 @@ export default function AppLayout() {
         setAlbumModal({ isOpen: true, photoIds });
     };
 
+    const bottomNavItems = [
+        { to: '/', label: 'Photos', icon: Image },
+        { to: '/favorites', label: 'Favorites', icon: Star },
+        { to: '/albums', label: 'Albums', icon: FolderPlus },
+        { to: '/trash', label: 'Trash', icon: Trash2 },
+    ];
+
     return (
         <div className="h-screen flex flex-col bg-white overflow-hidden">
             <Navbar
@@ -56,6 +64,28 @@ export default function AppLayout() {
                     />
                 </main>
             </div>
+
+            {/* Mobile Bottom Navigation Bar */}
+            <nav className="md:hidden fixed bottom-0 inset-x-0 h-14 bg-white/95 backdrop-blur-md border-t border-slate-200 z-30 flex items-center justify-around px-2 select-none shadow-xs">
+                {bottomNavItems.map((item) => {
+                    const IconComp = item.icon;
+                    return (
+                        <NavLink
+                            key={item.to}
+                            to={item.to}
+                            end={item.to === '/'}
+                            className={({ isActive }) =>
+                                `flex flex-col items-center justify-center py-1 px-3 text-[11px] font-medium transition-colors ${
+                                    isActive ? 'text-red-600' : 'text-slate-500 hover:text-slate-800'
+                                }`
+                            }
+                        >
+                            <IconComp className="size-5 mb-0.5" />
+                            <span>{item.label}</span>
+                        </NavLink>
+                    );
+                })}
+            </nav>
 
             <UploadModal
                 isOpen={uploadOpen}

@@ -67,11 +67,11 @@ export default function TrashPage() {
         <div className="max-w-7xl mx-auto space-y-6">
             <div className="flex items-center justify-between pb-2 border-b border-slate-200/60">
                 <div>
-                    <h2 className="text-2xl font-medium text-slate-900 tracking-tight flex items-center gap-2">
-                        <Trash2 className="size-6 text-red-500" />
+                    <h2 className="text-xl sm:text-2xl font-medium text-slate-900 tracking-tight flex items-center gap-2">
+                        <Trash2 className="size-5 sm:size-6 text-red-500" />
                         Trash
                         {trashItems.length > 0 && (
-                            <span className="text-sm font-semibold text-slate-400 bg-slate-100 px-2.5 py-0.5 rounded-full">
+                            <span className="text-xs sm:text-sm font-semibold text-slate-400 bg-slate-100 px-2 sm:px-2.5 py-0.5 rounded-full">
                                 {trashItems.length}
                             </span>
                         )}
@@ -83,9 +83,9 @@ export default function TrashPage() {
                 {trashItems.length > 0 && (
                     <button
                         onClick={handleClearTrash}
-                        className="flex items-center px-4 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-medium rounded-full transition cursor-pointer"
+                        className="flex items-center px-3 sm:px-4 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-medium rounded-full transition cursor-pointer shrink-0"
                     >
-                        <Trash2 className="size-4 mr-2" />
+                        <Trash2 className="size-3.5 sm:size-4 mr-1.5 sm:mr-2" />
                         <span>Clear Trash</span>
                     </button>
                 )}
