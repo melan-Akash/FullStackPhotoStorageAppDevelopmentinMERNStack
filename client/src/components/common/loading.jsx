@@ -26,3 +26,4 @@ export default function Loading({ className = '', size = 'md', fullScreen = fals
         </div>
     );
 }
+
