@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Menu, Search, X, Sparkle, Upload, LogOut } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { useAuth } from '../../context/context';
 
 export default function Navbar({
@@ -36,6 +37,7 @@ export default function Navbar({
     const handleSignOut = () => {
         setDropdownOpen(false);
         if (logout) logout();
+        toast.success('Signed out successfully');
         navigate('/login');
     };
 

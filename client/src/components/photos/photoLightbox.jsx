@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { X, ChevronLeftIcon, ChevronRightIcon, StarIcon, InfoIcon, Download, Trash2, FolderPlus, Calendar, HardDrive, Maximize2, Film, SparkleIcon } from "lucide-react";
+import toast from "react-hot-toast";
 
 export const PhotoLightbox = ({ photos, currentPhoto, onClose, onToggleFavorite, onTrashPhoto, onAddToAlbum }) => {
     const [showInfo, setShowInfo] = useState(false);
@@ -45,6 +46,7 @@ export const PhotoLightbox = ({ photos, currentPhoto, onClose, onToggleFavorite,
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+        toast.success(`Started download for ${activePhoto.title || 'media'}`);
     };
 
     const formattedSize = activePhoto.size ? `${(activePhoto.size / (1024 * 1024)).toFixed(2)} MB` : "Unknown";

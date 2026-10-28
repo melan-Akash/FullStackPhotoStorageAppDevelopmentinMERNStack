@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
+import toast from 'react-hot-toast';
 import Loading from '../components/common/loading';
 import { useAuth } from '../context/context';
 
@@ -46,7 +47,12 @@ export default function AuthPage() {
                     email: formData.email,
                 });
             }
+            toast.success(
+                isSignIn ? 'Welcome back! Signed in successfully.' : 'Account created successfully!'
+            );
             navigate('/');
+        } catch {
+            toast.error('Authentication failed. Please try again.');
         } finally {
             setLoading(false);
         }

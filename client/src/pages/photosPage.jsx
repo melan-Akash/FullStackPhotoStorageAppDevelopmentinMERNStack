@@ -52,12 +52,17 @@ export default function PhotosPage() {
     };
 
     const handleToggleFavorite = (id) => {
+        let isNowFav = false;
         setPhotos((prev) =>
-            prev.map((photo) =>
-                photo._id === id ? { ...photo, isFavorite: !photo.isFavorite } : photo
-            )
+            prev.map((photo) => {
+                if (photo._id === id) {
+                    isNowFav = !photo.isFavorite;
+                    return { ...photo, isFavorite: isNowFav };
+                }
+                return photo;
+            })
         );
-        toast.success('Favorite status updated');
+        toast.success(isNowFav ? 'Added to favorites ⭐' : 'Removed from favorites');
     };
 
     const handleTrashPhoto = (id) => {
