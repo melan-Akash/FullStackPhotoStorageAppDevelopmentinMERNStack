@@ -212,3 +212,6 @@ export const PhotoLightbox = ({ photos, currentPhoto, onClose, onToggleFavorite,
         </div>
     );
 };
+
+export default PhotoLightbox;
+
