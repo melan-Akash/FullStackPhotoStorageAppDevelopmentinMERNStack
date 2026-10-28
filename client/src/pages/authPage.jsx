@@ -143,10 +143,21 @@ export default function AuthPage() {
                     />
                     <div className="absolute inset-0 bg-linear-to-b from-black/30 via-black/60 to-black" />
                     <div className="relative z-10 mt-auto pt-24 sm:pt-32">
-                        <h2 className="text-4xl sm:text-5xl lg:text-5xl font-medium ">ImageCloud</h2>
+                        <h2 className="text-4xl sm:text-5xl lg:text-5xl font-medium">ImageCloud</h2>
                         <p className="text-xs sm:text-sm text-white/80 leading-relaxed max-w-sm mt-4 sm:mt-5">
                             Safely store and organize your HD photos and videos.
                         </p>
+                        <div className="mt-6 pt-5 border-t border-white/15 text-xs text-white/75 flex items-center gap-1.5 flex-wrap">
+                            <span>© 2026 ImageCloud. Created &amp; Designed by</span>
+                            <a
+                                href="https://www.linkedin.com/in/melan-akash-5b5746402/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-semibold text-white hover:text-red-400 underline underline-offset-2 transition-colors inline-flex items-center gap-1"
+                            >
+                                Melan Akash
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -426,6 +437,18 @@ export default function AuthPage() {
                         </button>
                     </div>
                 )}
+
+                <div className="mt-6 text-xs text-center text-slate-500 lg:hidden pt-4 border-t border-slate-100">
+                    <span>© 2026 ImageCloud. Created &amp; Designed by </span>
+                    <a
+                        href="https://www.linkedin.com/in/melan-akash-5b5746402/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-medium text-slate-800 hover:text-red-600 underline underline-offset-2 transition-colors"
+                    >
+                        Melan Akash
+                    </a>
+                </div>
             </div>
         </div>
     );
